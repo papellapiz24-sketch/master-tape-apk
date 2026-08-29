@@ -5,10 +5,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Java
+      - name: Set up Java JDK
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
@@ -22,16 +22,18 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Cordova
-        run: npm install -g cordova
-
-      - name: Prepare & Build APK
+      - name: Create Cordova Project & Build APK
         run: |
+          npm install -g cordova
+          cordova create app com.bamniya.mastertape "Cobra Master Tape"
+          cd app
+          cp ../config.xml ./config.xml
+          cp -r ../www/* ./www/
           cordova platform add android
           cordova build android --debug
 
-      - name: Upload APK
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: CobraMasterTape-APK
-          path: platforms/android/app/build/outputs/apk/debug/*.apk
+          path: app/platforms/android/app/build/outputs/apk/debug/*.apk
