@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.bamniya.mastertape" version="1.0.0" xmlns="http://www.w3.org/ns/widgets">
+    <name>Cobra Master Tape</name>
+    <description>Tailor Proportional Tape Measure Calculator</description>
+    <content src="index.html" />
+    <preference name="Orientation" value="portrait" />
+    <preference name="Fullscreen" value="false" />
+</widget>
