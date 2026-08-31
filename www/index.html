@@ -3,19 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#0d1117">
+<meta name="theme-color" content="#090d16">
 <title>Cobra Master Tape</title>
 <style>
   :root {
-    --bg-dark: #0d1117;
-    --panel-card: #161b22;
-    --border-line: #30363d;
-    --text-main: #f0f6fc;
-    --text-muted: #8b949e;
+    --bg-app: #090d16;
+    --panel: #131b2e;
+    --border: #243049;
+    --text-pri: #f8fafc;
+    --text-mut: #94a3b8;
     --accent-amber: #f59e0b;
     --accent-cyan: #38bdf8;
     --accent-red: #ef4444;
-    --btn-key: #21262d;
+    --btn-key: #1e293b;
+    --btn-key-border: #334155;
   }
 
   * {
@@ -29,84 +30,87 @@
   }
 
   body {
-    background-color: var(--bg-dark);
-    color: var(--text-main);
+    background-color: #030712;
+    color: var(--text-pri);
     display: flex;
-    flex-direction: column;
-    height: 100vh;
-    padding: 8px;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
     overflow: hidden;
   }
 
-  /* 1. UPPER-HALF DISPLAY & TAPE STACK */
-  .upper-half-container {
+  .mobile-container {
+    background-color: var(--bg-app);
+    width: 100%;
+    max-width: 412px;
+    height: 100vh;
+    max-height: 915px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+  }
+
+  /* 1. TOP SECTION: GAP */
+  .top-gap-spacer {
+    flex: 0 0 10%;
+  }
+
+  /* 2. MIDDLE SECTION: MAIN DISPLAY BOX + ATTACHED TAPE */
+  .middle-display-stack {
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin-top: 2px;
   }
 
-  /* Input Preview Row */
-  .input-bar {
-    background: #0f141c;
-    border: 1px solid var(--border-line);
+  .main-answer-box {
+    background: var(--panel);
+    border: 1px solid var(--border);
     border-bottom: none;
-    border-radius: 10px 10px 0 0;
-    padding: 6px 14px;
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-  }
-
-  .input-title {
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    letter-spacing: 0.5px;
-  }
-
-  .input-reading {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--accent-amber);
-  }
-
-  /* Final Calculated Measurement Box */
-  .measurement-box {
-    background: var(--panel-card);
-    border: 1px solid var(--border-line);
-    border-bottom: none;
+    border-radius: 12px 12px 0 0;
     padding: 8px 14px;
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
   }
 
-  .final-scale-title {
-    font-size: 0.82rem;
-    font-weight: 700;
-    text-transform: uppercase;
+  .readout-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .readout-scale-name {
+    font-size: 0.85rem;
+    font-weight: 800;
     color: var(--accent-cyan);
+    text-transform: uppercase;
     letter-spacing: 0.6px;
   }
 
-  .final-scale-val {
-    font-size: 1.65rem;
-    font-weight: 900;
-    color: var(--accent-red);
+  .readout-base-input {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--accent-amber);
   }
 
-  /* Zero-Gap Tape directly below measurement box */
+  .readout-final-val {
+    font-size: 1.95rem;
+    font-weight: 900;
+    color: var(--accent-red);
+    letter-spacing: -0.5px;
+  }
+
   .tape-wrapper {
     width: 100%;
-    height: 100px;
-    background: #090d16;
-    border: 1px solid var(--border-line);
-    border-radius: 0 0 10px 10px;
-    position: relative;
+    height: 95px;
+    background: #fdd835;
+    border: 1px solid var(--border);
+    border-radius: 0 0 12px 12px;
     overflow: hidden;
+    position: relative;
+    margin: 0;
+    padding: 0;
   }
 
   canvas {
@@ -115,16 +119,16 @@
     display: block;
   }
 
-  /* 2. LOWER-HALF CONTROLS (SCALES & CALCULATOR PAD) */
-  .lower-half-controls {
+  /* 3. BOTTOM BUTTONS: FRACTION ROW ON TOP OF CALCULATOR */
+  .keypad-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
     margin-top: auto;
     padding-bottom: 2px;
   }
 
-  /* Scales Grid */
+  /* Distinct Top Fraction Buttons */
   .grid-scales {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -132,26 +136,28 @@
   }
 
   .btn-scale {
-    background: var(--panel-card);
+    background: #0f1c32;
     color: var(--accent-cyan);
-    border: 1px solid var(--border-line);
-    border-radius: 7px;
-    padding: 8px 2px;
-    font-size: 0.82rem;
-    font-weight: 700;
-    text-align: center;
+    border: 1px solid #1e3a5f;
+    border-radius: 8px;
+    height: 38px;
+    font-size: 0.9rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    transition: transform 0.05s;
+    transition: transform 0.05s, background 0.15s;
   }
 
   .btn-scale.active {
     background: #0284c7;
     color: #ffffff;
     border-color: #38bdf8;
-    box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
   }
 
-  /* Calculation Numpad Grid */
+  /* Standard Calculator Pad */
   .grid-numpad {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -160,11 +166,11 @@
 
   .btn-pad {
     background: var(--btn-key);
-    color: var(--text-main);
-    border: 1px solid var(--border-line);
-    border-radius: 7px;
-    font-size: 1.2rem;
-    font-weight: 600;
+    color: var(--text-pri);
+    border: 1px solid var(--btn-key-border);
+    border-radius: 8px;
+    font-size: 1.25rem;
+    font-weight: 700;
     height: 48px;
     display: flex;
     align-items: center;
@@ -181,21 +187,24 @@
   .btn-op { background: #38280f; color: #fbbf24; border-color: #d97706; }
   .btn-clear { background: #3c1e1e; color: #f87171; border-color: #ef4444; }
   .btn-eq { background: #143522; color: #4ade80; border-color: #22c55e; }
-  .btn-half { background: #162c46; color: #38bdf8; border-color: #0284c7; font-size: 0.9rem; }
+  .btn-half { background: #162c46; color: #38bdf8; border-color: #0284c7; font-size: 0.95rem; }
 </style>
 </head>
 <body>
 
-  <!-- 1. Upper-Half Middle Focus: Measurement Box + Direct Tape -->
-  <div class="upper-half-container">
-    <div class="input-bar">
-      <span class="input-title">Base Measurement</span>
-      <span class="input-reading" id="disp-expr">38"</span>
-    </div>
+<div class="mobile-container">
 
-    <div class="measurement-box">
-      <span class="final-scale-title" id="disp-scale-name">1/8 Scale</span>
-      <span class="final-scale-val" id="disp-scale-val">4 3/4"</span>
+  <!-- 1. Top Gap -->
+  <div class="top-gap-spacer"></div>
+
+  <!-- 2. Middle Main Box + Directly Attached Tape -->
+  <div class="middle-display-stack">
+    <div class="main-answer-box">
+      <div class="readout-info">
+        <span class="readout-scale-name" id="disp-scale-name">1/8 (8ths)</span>
+        <span class="readout-base-input" id="disp-expr">Base: 38"</span>
+      </div>
+      <div class="readout-final-val" id="disp-scale-val">4 3/4"</div>
     </div>
 
     <div class="tape-wrapper">
@@ -203,29 +212,31 @@
     </div>
   </div>
 
-  <!-- 2. Lower-Half Controls: Proportion Buttons + Numpad -->
-  <div class="lower-half-controls">
+  <!-- 3. Keypad: Scale Buttons Placed on Top of Calculator -->
+  <div class="keypad-wrapper">
     <div class="grid-scales" id="scaleGrid"></div>
     <div class="grid-numpad" id="numPad"></div>
   </div>
+
+</div>
 
 <script>
   window.addEventListener('DOMContentLoaded', () => {
     let calcExpr = "38";
     let committedBaseVal = 38.0;
     let activeMark = 38.0 / 8.0;
-    let activeLabel = "1/8";
+    let activeLabel = "1/8 (8ths)";
     let activeDivisor = 8;
 
     const scales = [
-      { label: "1/2", val: 2 },
-      { label: "1/3", val: 3 },
-      { label: "1/4", val: 4 },
-      { label: "1/6", val: 6 },
-      { label: "1/8", val: 8 },
-      { label: "1/10", val: 10 },
-      { label: "1/12", val: 12 },
-      { label: "1/16", val: 16 }
+      { label: "1/2 (Halves)", short: "1/2", val: 2 },
+      { label: "1/3 (3rds)", short: "1/3", val: 3 },
+      { label: "1/4 (4ths)", short: "1/4", val: 4 },
+      { label: "1/6 (6ths)", short: "1/6", val: 6 },
+      { label: "1/8 (8ths)", short: "1/8", val: 8 },
+      { label: "1/10 (10ths)", short: "1/10", val: 10 },
+      { label: "1/12 (12ths)", short: "1/12", val: 12 },
+      { label: "1/16 (16ths)", short: "1/16", val: 16 }
     ];
 
     const padKeys = [
@@ -257,7 +268,7 @@
       scales.forEach(s => {
         const btn = document.createElement('button');
         btn.className = 'btn-scale' + (s.label === activeLabel ? ' active' : '');
-        btn.innerText = s.label;
+        btn.innerText = s.short;
         btn.onclick = () => executeScaleCalculation(s);
         grid.appendChild(btn);
       });
@@ -296,7 +307,7 @@
         if (calcExpr === "0" || calcExpr === "Error") calcExpr = k;
         else calcExpr += k;
       }
-      document.getElementById('disp-expr').innerText = calcExpr + '"';
+      document.getElementById('disp-expr').innerText = 'Base: ' + calcExpr + '"';
     }
 
     function executeScaleCalculation(scaleObj) {
@@ -311,7 +322,8 @@
       activeDivisor = scaleObj.val;
       activeMark = committedBaseVal / activeDivisor;
 
-      document.getElementById('disp-scale-name').innerText = scaleObj.label + ' Scale';
+      document.getElementById('disp-scale-name').innerText = scaleObj.label;
+      document.getElementById('disp-expr').innerText = 'Base: ' + committedBaseVal + '"';
       document.getElementById('disp-scale-val').innerText = toFraction(activeMark);
 
       renderScales();
@@ -324,7 +336,7 @@
     function resizeCanvas() {
       const dpr = window.devicePixelRatio || 1;
       canvas.width = (canvas.parentElement.clientWidth || 360) * dpr;
-      canvas.height = (canvas.parentElement.clientHeight || 100) * dpr;
+      canvas.height = (canvas.parentElement.clientHeight || 95) * dpr;
       drawTape();
     }
 
@@ -339,11 +351,9 @@
       const pxPerInch = w / span;
       const midY = h * 0.48;
 
-      // 1. Classic Yellow Tape Background
       ctx.fillStyle = "#fdd835";
       ctx.fillRect(0, 0, w, h);
 
-      // 2. Middle Divider
       ctx.strokeStyle = "#111827";
       ctx.lineWidth = 1.2 * dpr;
       ctx.beginPath();
@@ -351,7 +361,6 @@
       ctx.lineTo(w, midY);
       ctx.stroke();
 
-      // 3. Top Half: Inches & Fractions
       const totalEighths = Math.floor(span * 8) + 4;
       const firstEighth = Math.floor(startInch * 8);
 
@@ -369,9 +378,9 @@
           tickH = midY;
           lineW = 2.2 * dpr;
           ctx.fillStyle = "#111827";
-          ctx.font = '900 ' + (22 * dpr) + 'px "Arial Black", Impact, sans-serif';
+          ctx.font = '900 ' + (20 * dpr) + 'px "Arial Black", Impact, sans-serif';
           ctx.textAlign = "center";
-          ctx.fillText(curInch, x + (18 * dpr), midY - (6 * dpr));
+          ctx.fillText(curInch, x + (16 * dpr), midY - (5 * dpr));
         } else if (sub === 4) {
           tickH = midY * 0.70;
           lineW = 1.6 * dpr;
@@ -388,7 +397,6 @@
         ctx.stroke();
       }
 
-      // 4. Bottom Half: Metric (cm & mm)
       const startCm = startInch * 2.54;
       const pxPerCm = pxPerInch / 2.54;
       const totalMm = Math.floor(span * 2.54 * 10) + 10;
@@ -408,9 +416,9 @@
           tickH = (h - midY);
           lineW = 2.0 * dpr;
           ctx.fillStyle = "#111827";
-          ctx.font = '800 ' + (16 * dpr) + 'px "Arial Black", Impact, sans-serif';
+          ctx.font = '800 ' + (15 * dpr) + 'px "Arial Black", Impact, sans-serif';
           ctx.textAlign = "center";
-          ctx.fillText(curCm, x + (14 * dpr), h - (6 * dpr));
+          ctx.fillText(curCm, x + (13 * dpr), h - (5 * dpr));
         } else if (sub === 5) {
           tickH = (h - midY) * 0.65;
           lineW = 1.4 * dpr;
@@ -424,7 +432,6 @@
         ctx.stroke();
       }
 
-      // 5. Red Target Laser Needle
       const redX = (activeMark - startInch) * pxPerInch;
       if (redX >= 0 && redX <= w) {
         ctx.strokeStyle = "#dc2626";
@@ -439,13 +446,13 @@
         ctx.beginPath();
         ctx.moveTo(redX - (6 * dpr), 0);
         ctx.lineTo(redX + (6 * dpr), 0);
-        ctx.lineTo(redX, 10 * dpr);
+        ctx.lineTo(redX, 9 * dpr);
         ctx.fill();
 
         ctx.beginPath();
         ctx.moveTo(redX - (6 * dpr), h);
         ctx.lineTo(redX + (6 * dpr), h);
-        ctx.lineTo(redX, h - (10 * dpr));
+        ctx.lineTo(redX, h - (9 * dpr));
         ctx.fill();
       }
     }
