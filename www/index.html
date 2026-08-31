@@ -39,7 +39,6 @@
     overflow: hidden;
   }
 
-  /* Centered phone wrapper */
   .app-frame {
     background-color: var(--bg-dark);
     width: 100%;
@@ -54,14 +53,14 @@
     box-shadow: 0 10px 40px rgba(0,0,0,0.8);
   }
 
-  /* 1. TOP: LEAVE THE GAP */
+  /* 1. TOP GAP */
   .top-gap {
     flex: 1 1 auto;
     min-height: 15px;
     max-height: 60px;
   }
 
-  /* 2. MIDDLE: MAIN BOX + TAPE DIRECTLY UNDERNEATH */
+  /* 2. MAIN ANSWER BOX + TAPE */
   .tape-section {
     display: flex;
     flex-direction: column;
@@ -69,36 +68,37 @@
     margin-bottom: 12px;
   }
 
-  /* Main Box where final answers are shown */
   .main-answer-card {
     background: var(--panel-bg);
     border: 1px solid var(--card-border);
     border-bottom: none;
     border-radius: 12px 12px 0 0;
-    padding: 10px 14px;
+    padding: 10px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
 
-  .main-label-group {
+  .main-left-group {
     display: flex;
     flex-direction: column;
     gap: 2px;
   }
 
-  .main-scale-title {
-    font-size: 0.85rem;
-    font-weight: 800;
-    color: var(--cyan);
+  .base-label-small {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-gray);
     text-transform: uppercase;
     letter-spacing: 0.6px;
   }
 
-  .main-input-preview {
-    font-size: 0.95rem;
-    font-weight: 600;
+  .base-val-big {
+    font-size: 1.85rem;
+    font-weight: 900;
     color: var(--amber);
+    letter-spacing: -0.5px;
+    line-height: 1.1;
   }
 
   .main-final-val {
@@ -106,9 +106,9 @@
     font-weight: 900;
     color: var(--red);
     letter-spacing: -0.5px;
+    line-height: 1.1;
   }
 
-  /* Tape right under the main answer box */
   .tape-display {
     width: 100%;
     height: 96px;
@@ -127,14 +127,13 @@
     display: block;
   }
 
-  /* 3. BOTTOM: ALL THE BUTTONS */
+  /* 3. BUTTONS AREA */
   .controls-section {
     display: flex;
     flex-direction: column;
     gap: 6px;
   }
 
-  /* Scale Buttons (ths) on top of Calculator */
   .grid-scales {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -163,7 +162,6 @@
     box-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
   }
 
-  /* Standard Calculator Buttons */
   .grid-numpad {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -190,6 +188,10 @@
     filter: brightness(1.3);
   }
 
+  .btn-pad.span-two {
+    grid-column: span 2;
+  }
+
   .btn-op { background: #38280f; color: #fbbf24; border-color: #d97706; }
   .btn-clear { background: #3c1e1e; color: #f87171; border-color: #ef4444; }
   .btn-eq { background: #143522; color: #4ade80; border-color: #22c55e; }
@@ -200,17 +202,15 @@
 
 <div class="app-frame">
 
-  <!-- 1. Top Gap Space -->
   <div class="top-gap"></div>
 
-  <!-- 2. Main Box (Final Answers) + Tape directly attached -->
   <div class="tape-section">
     <div class="main-answer-card">
-      <div class="main-label-group">
-        <span class="main-scale-title" id="disp-scale-name">1/8 (8ths)</span>
-        <span class="main-input-preview" id="disp-expr">Base: 38"</span>
+      <div class="main-left-group">
+        <span class="base-label-small">Base Measure</span>
+        <span class="base-val-big" id="disp-expr">38"</span>
       </div>
-      <div class="main-final-val" id="disp-scale-val">4 3/4"</div>
+      <div class="main-final-val" id="disp-scale-val">38"</div>
     </div>
 
     <div class="tape-display">
@@ -218,7 +218,6 @@
     </div>
   </div>
 
-  <!-- 3. All The Buttons (Scales on top of Calculator) -->
   <div class="controls-section">
     <div class="grid-scales" id="scaleGrid"></div>
     <div class="grid-numpad" id="numPad"></div>
@@ -228,43 +227,52 @@
 
 <script>
   let calcExpr = "38";
-  let committedBaseVal = 38.0;
-  let activeMark = 38.0 / 8.0;
-  let activeLabel = "1/8 (8ths)";
-  let activeDivisor = 8;
+  let activeMark = 38.0;
+  let activeScale = null;
 
   const scales = [
-    { label: "1/2 (Halves)", short: "1/2", val: 2 },
-    { label: "1/3 (3rds)", short: "1/3", val: 3 },
-    { label: "1/4 (4ths)", short: "1/4", val: 4 },
-    { label: "1/6 (6ths)", short: "1/6", val: 6 },
-    { label: "1/8 (8ths)", short: "1/8", val: 8 },
-    { label: "1/10 (10ths)", short: "1/10", val: 10 },
-    { label: "1/12 (12ths)", short: "1/12", val: 12 },
-    { label: "1/16 (16ths)", short: "1/16", val: 16 }
+    { label: "1/2", val: 2 },
+    { label: "1/3", val: 3 },
+    { label: "1/4", val: 4 },
+    { label: "1/6", val: 6 },
+    { label: "1/8", val: 8 },
+    { label: "1/10", val: 10 },
+    { label: "1/12", val: 12 },
+    { label: "1/16", val: 16 }
   ];
 
+  // Clean Single-C Layout with Wide Zero
   const padKeys = [
-    { k: 'C', c: 'btn-clear' }, { k: '⌫', c: '' }, { k: '/', c: 'btn-op' }, { k: '*', c: 'btn-op' },
-    { k: '7', c: '' }, { k: '8', c: '' }, { k: '9', c: '' }, { k: '-', c: 'btn-op' },
-    { k: '4', c: '' }, { k: '5', c: '' }, { k: '6', c: '' }, { k: '+', c: 'btn-op' },
-    { k: '1', c: '' }, { k: '2', c: '' }, { k: '3', c: '' }, { k: '+1/2', c: 'btn-half' },
-    { k: '0', c: '' }, { k: '.', c: '' }, { k: '(', c: '' }, { k: '=', c: 'btn-eq' }
+    { k: 'C', c: 'btn-clear' }, { k: '⌫', c: '' }, { k: '+1/2', c: 'btn-half' }, { k: '/', c: 'btn-op' },
+    { k: '7', c: '' }, { k: '8', c: '' }, { k: '9', c: '' }, { k: '*', c: 'btn-op' },
+    { k: '4', c: '' }, { k: '5', c: '' }, { k: '6', c: '' }, { k: '-', c: 'btn-op' },
+    { k: '1', c: '' }, { k: '2', c: '' }, { k: '3', c: '' }, { k: '+', c: 'btn-op' },
+    { k: '0', c: 'span-two' }, { k: '.', c: '' }, { k: '=', c: 'btn-eq' }
   ];
 
   function toFraction(val) {
-    if (val <= 0) return '0"';
+    if (val <= 0 || isNaN(val)) return '0"';
     const whole = Math.floor(val);
     const rem = val - whole;
     const eighths = Math.round(rem * 8);
-    if (eighths === 0) return whole + '"';
-    if (eighths === 8) return (whole + 1) + '"';
+    if (eighths === 0) return `${whole}"`;
+    if (eighths === 8) return `${whole + 1}"`;
 
     function gcd(a, b) { return b ? gcd(b, a % b) : a; }
     const div = gcd(eighths, 8);
     const num = eighths / div;
     const den = 8 / div;
-    return (whole > 0 ? whole + ' ' : '') + num + '/' + den + '"';
+    return `${whole > 0 ? whole + ' ' : ''}${num}/${den}"`;
+  }
+
+  function evaluateCurrent() {
+    try {
+      const sanitized = calcExpr.replace(/[^0-9+\-*/.]/g, '');
+      const evaluated = Function('"use strict";return (' + sanitized + ')')();
+      return isNaN(evaluated) ? 0 : Math.max(0, evaluated);
+    } catch(e) {
+      return null;
+    }
   }
 
   function renderScales() {
@@ -272,8 +280,8 @@
     grid.innerHTML = '';
     scales.forEach(s => {
       const btn = document.createElement('button');
-      btn.className = 'btn-scale' + (s.label === activeLabel ? ' active' : '');
-      btn.innerText = s.short;
+      btn.className = 'btn-scale' + (activeScale === s.val ? ' active' : '');
+      btn.innerText = s.label;
       btn.onclick = () => executeScaleCalculation(s);
       grid.appendChild(btn);
     });
@@ -286,54 +294,85 @@
       const btn = document.createElement('button');
       btn.className = 'btn-pad ' + p.c;
       btn.innerText = p.k;
-      btn.onclick = () => handlePadInput(p.k);
+      btn.onclick = () => handleInput(p.k);
       pad.appendChild(btn);
     });
   }
 
-  function handlePadInput(k) {
-    if (k === 'C') {
+  function handleInput(k) {
+    if (k === 'C' || k === 'Escape') {
       calcExpr = "0";
-    } else if (k === '⌫') {
+      activeMark = 0;
+      activeScale = null;
+      document.getElementById('disp-expr').innerText = '0"';
+      document.getElementById('disp-scale-val').innerText = '0"';
+      renderScales();
+      drawTape();
+      return;
+    } 
+    
+    if (k === '⌫' || k === 'Backspace') {
       calcExpr = calcExpr.length > 1 ? calcExpr.slice(0, -1) : "0";
-    } else if (k === '=') {
-      try {
-        const evaluated = Function('"use strict";return (' + calcExpr + ')')();
-        calcExpr = String(Math.round(evaluated * 1000) / 1000);
-      } catch(e) {
+      activeScale = null;
+    } else if (k === '=' || k === 'Enter') {
+      const evalVal = evaluateCurrent();
+      if (evalVal !== null) {
+        calcExpr = String(Math.round(evalVal * 1000) / 1000);
+        activeMark = evalVal;
+        activeScale = null;
+      } else {
         calcExpr = "Error";
       }
     } else if (k === '+1/2') {
-      try {
-        const evaluated = Function('"use strict";return (' + calcExpr + ')')();
-        calcExpr = String(Math.round((evaluated + 0.5) * 1000) / 1000);
-      } catch(e) {}
+      const evalVal = evaluateCurrent();
+      if (evalVal !== null) {
+        calcExpr = String(Math.round((evalVal + 0.5) * 1000) / 1000);
+        activeMark = evalVal + 0.5;
+        activeScale = null;
+      }
     } else {
-      if (calcExpr === "0" || calcExpr === "Error") calcExpr = k;
-      else calcExpr += k;
+      if (calcExpr === "0" || calcExpr === "Error") {
+        calcExpr = k;
+      } else {
+        calcExpr += k;
+      }
+      activeScale = null;
     }
-    document.getElementById('disp-expr').innerText = 'Base: ' + calcExpr + '"';
+
+    const currentCalculated = evaluateCurrent();
+    if (currentCalculated !== null) {
+      activeMark = currentCalculated;
+      document.getElementById('disp-scale-val').innerText = toFraction(activeMark);
+    }
+
+    document.getElementById('disp-expr').innerText = calcExpr + '"';
+    renderScales();
+    drawTape();
   }
 
   function executeScaleCalculation(scaleObj) {
-    try {
-      const evaluated = Function('"use strict";return (' + calcExpr + ')')();
-      committedBaseVal = Math.max(0, parseFloat(evaluated) || 0);
-    } catch(e) {
-      committedBaseVal = 0;
-    }
+    const base = evaluateCurrent();
+    const validBase = (base !== null) ? base : 0;
+    
+    activeScale = scaleObj.val;
+    activeMark = validBase / scaleObj.val;
 
-    activeLabel = scaleObj.label;
-    activeDivisor = scaleObj.val;
-    activeMark = committedBaseVal / activeDivisor;
-
-    document.getElementById('disp-scale-name').innerText = scaleObj.label;
-    document.getElementById('disp-expr').innerText = 'Base: ' + committedBaseVal + '"';
+    document.getElementById('disp-expr').innerText = validBase + '"';
     document.getElementById('disp-scale-val').innerText = toFraction(activeMark);
 
     renderScales();
     drawTape();
   }
+
+  // Physical Keyboard & Numpad Listeners
+  window.addEventListener('keydown', (e) => {
+    const key = e.key;
+    if (key >= '0' && key <= '9') handleInput(key);
+    else if (key === '+' || key === '-' || key === '*' || key === '/' || key === '.') handleInput(key);
+    else if (key === 'Enter') { e.preventDefault(); handleInput('='); }
+    else if (key === 'Backspace') handleInput('⌫');
+    else if (key === 'Escape' || key.toLowerCase() === 'c') handleInput('C');
+  });
 
   const canvas = document.getElementById('tapeCanvas');
   const ctx = canvas.getContext('2d');
@@ -441,28 +480,22 @@
       ctx.stroke();
     }
 
-    // Red Target Laser Needle
+    // Thin Half-Length Needle (Top Zone Pointer)
     const redX = (activeMark - startInch) * pxPerInch;
     if (redX >= 0 && redX <= w) {
       ctx.strokeStyle = "#dc2626";
       ctx.fillStyle = "#dc2626";
-      ctx.lineWidth = 2.5 * dpr;
+      ctx.lineWidth = 1.5 * dpr;
 
       ctx.beginPath();
       ctx.moveTo(redX, 0);
-      ctx.lineTo(redX, h);
+      ctx.lineTo(redX, midY);
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.moveTo(redX - (6 * dpr), 0);
-      ctx.lineTo(redX + (6 * dpr), 0);
-      ctx.lineTo(redX, 9 * dpr);
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.moveTo(redX - (6 * dpr), h);
-      ctx.lineTo(redX + (6 * dpr), h);
-      ctx.lineTo(redX, h - (9 * dpr));
+      ctx.moveTo(redX - (3.5 * dpr), 0);
+      ctx.lineTo(redX + (3.5 * dpr), 0);
+      ctx.lineTo(redX, 6 * dpr);
       ctx.fill();
     }
   }
