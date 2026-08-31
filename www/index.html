@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#090d16">
+<meta name="theme-color" content="#0a0e17">
 <title>Cobra Master Tape</title>
 <style>
   :root {
-    --bg-app: #090d16;
-    --panel: #131b2e;
-    --border: #243049;
-    --text-pri: #f8fafc;
-    --text-mut: #94a3b8;
-    --accent-amber: #f59e0b;
-    --accent-cyan: #38bdf8;
-    --accent-red: #ef4444;
-    --btn-key: #1e293b;
-    --btn-key-border: #334155;
+    --bg-dark: #070a12;
+    --panel-bg: #111827;
+    --card-border: #1f293d;
+    --text-white: #f9fafb;
+    --text-gray: #9ca3af;
+    --amber: #f59e0b;
+    --cyan: #38bdf8;
+    --red: #ef4444;
+    --key-dark: #1e293b;
+    --key-border: #334155;
   }
 
   * {
@@ -31,7 +31,7 @@
 
   body {
     background-color: #030712;
-    color: var(--text-pri);
+    color: var(--text-white);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -39,73 +39,81 @@
     overflow: hidden;
   }
 
-  .mobile-container {
-    background-color: var(--bg-app);
+  /* Centered phone wrapper */
+  .app-frame {
+    background-color: var(--bg-dark);
     width: 100%;
-    max-width: 412px;
+    max-width: 400px;
     height: 100vh;
-    max-height: 915px;
+    max-height: 860px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 10px;
+    padding: 12px 10px;
+    border: 1px solid #1e293b;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
   }
 
-  /* 1. TOP SECTION: GAP */
-  .top-gap-spacer {
-    flex: 0 0 10%;
+  /* 1. TOP: LEAVE THE GAP */
+  .top-gap {
+    flex: 1 1 auto;
+    min-height: 15px;
+    max-height: 60px;
   }
 
-  /* 2. MIDDLE SECTION: MAIN DISPLAY BOX + ATTACHED TAPE */
-  .middle-display-stack {
+  /* 2. MIDDLE: MAIN BOX + TAPE DIRECTLY UNDERNEATH */
+  .tape-section {
     display: flex;
     flex-direction: column;
     width: 100%;
+    margin-bottom: 12px;
   }
 
-  .main-answer-box {
-    background: var(--panel);
-    border: 1px solid var(--border);
+  /* Main Box where final answers are shown */
+  .main-answer-card {
+    background: var(--panel-bg);
+    border: 1px solid var(--card-border);
     border-bottom: none;
     border-radius: 12px 12px 0 0;
-    padding: 8px 14px;
+    padding: 10px 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
 
-  .readout-info {
+  .main-label-group {
     display: flex;
     flex-direction: column;
     gap: 2px;
   }
 
-  .readout-scale-name {
+  .main-scale-title {
     font-size: 0.85rem;
     font-weight: 800;
-    color: var(--accent-cyan);
+    color: var(--cyan);
     text-transform: uppercase;
     letter-spacing: 0.6px;
   }
 
-  .readout-base-input {
+  .main-input-preview {
     font-size: 0.95rem;
     font-weight: 600;
-    color: var(--accent-amber);
+    color: var(--amber);
   }
 
-  .readout-final-val {
-    font-size: 1.95rem;
+  .main-final-val {
+    font-size: 2.1rem;
     font-weight: 900;
-    color: var(--accent-red);
+    color: var(--red);
     letter-spacing: -0.5px;
   }
 
-  .tape-wrapper {
+  /* Tape right under the main answer box */
+  .tape-display {
     width: 100%;
-    height: 95px;
+    height: 96px;
     background: #fdd835;
-    border: 1px solid var(--border);
+    border: 1px solid var(--card-border);
     border-radius: 0 0 12px 12px;
     overflow: hidden;
     position: relative;
@@ -119,16 +127,14 @@
     display: block;
   }
 
-  /* 3. BOTTOM BUTTONS: FRACTION ROW ON TOP OF CALCULATOR */
-  .keypad-wrapper {
+  /* 3. BOTTOM: ALL THE BUTTONS */
+  .controls-section {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-top: auto;
-    padding-bottom: 2px;
+    gap: 6px;
   }
 
-  /* Distinct Top Fraction Buttons */
+  /* Scale Buttons (ths) on top of Calculator */
   .grid-scales {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -137,9 +143,9 @@
 
   .btn-scale {
     background: #0f1c32;
-    color: var(--accent-cyan);
+    color: var(--cyan);
     border: 1px solid #1e3a5f;
-    border-radius: 8px;
+    border-radius: 7px;
     height: 38px;
     font-size: 0.9rem;
     font-weight: 800;
@@ -157,7 +163,7 @@
     box-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
   }
 
-  /* Standard Calculator Pad */
+  /* Standard Calculator Buttons */
   .grid-numpad {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -165,10 +171,10 @@
   }
 
   .btn-pad {
-    background: var(--btn-key);
-    color: var(--text-pri);
-    border: 1px solid var(--btn-key-border);
-    border-radius: 8px;
+    background: var(--key-dark);
+    color: var(--text-white);
+    border: 1px solid var(--key-border);
+    border-radius: 7px;
     font-size: 1.25rem;
     font-weight: 700;
     height: 48px;
@@ -192,28 +198,28 @@
 </head>
 <body>
 
-<div class="mobile-container">
+<div class="app-frame">
 
-  <!-- 1. Top Gap -->
-  <div class="top-gap-spacer"></div>
+  <!-- 1. Top Gap Space -->
+  <div class="top-gap"></div>
 
-  <!-- 2. Middle Main Box + Directly Attached Tape -->
-  <div class="middle-display-stack">
-    <div class="main-answer-box">
-      <div class="readout-info">
-        <span class="readout-scale-name" id="disp-scale-name">1/8 (8ths)</span>
-        <span class="readout-base-input" id="disp-expr">Base: 38"</span>
+  <!-- 2. Main Box (Final Answers) + Tape directly attached -->
+  <div class="tape-section">
+    <div class="main-answer-card">
+      <div class="main-label-group">
+        <span class="main-scale-title" id="disp-scale-name">1/8 (8ths)</span>
+        <span class="main-input-preview" id="disp-expr">Base: 38"</span>
       </div>
-      <div class="readout-final-val" id="disp-scale-val">4 3/4"</div>
+      <div class="main-final-val" id="disp-scale-val">4 3/4"</div>
     </div>
 
-    <div class="tape-wrapper">
+    <div class="tape-display">
       <canvas id="tapeCanvas"></canvas>
     </div>
   </div>
 
-  <!-- 3. Keypad: Scale Buttons Placed on Top of Calculator -->
-  <div class="keypad-wrapper">
+  <!-- 3. All The Buttons (Scales on top of Calculator) -->
+  <div class="controls-section">
     <div class="grid-scales" id="scaleGrid"></div>
     <div class="grid-numpad" id="numPad"></div>
   </div>
@@ -221,247 +227,253 @@
 </div>
 
 <script>
-  window.addEventListener('DOMContentLoaded', () => {
-    let calcExpr = "38";
-    let committedBaseVal = 38.0;
-    let activeMark = 38.0 / 8.0;
-    let activeLabel = "1/8 (8ths)";
-    let activeDivisor = 8;
+  let calcExpr = "38";
+  let committedBaseVal = 38.0;
+  let activeMark = 38.0 / 8.0;
+  let activeLabel = "1/8 (8ths)";
+  let activeDivisor = 8;
 
-    const scales = [
-      { label: "1/2 (Halves)", short: "1/2", val: 2 },
-      { label: "1/3 (3rds)", short: "1/3", val: 3 },
-      { label: "1/4 (4ths)", short: "1/4", val: 4 },
-      { label: "1/6 (6ths)", short: "1/6", val: 6 },
-      { label: "1/8 (8ths)", short: "1/8", val: 8 },
-      { label: "1/10 (10ths)", short: "1/10", val: 10 },
-      { label: "1/12 (12ths)", short: "1/12", val: 12 },
-      { label: "1/16 (16ths)", short: "1/16", val: 16 }
-    ];
+  const scales = [
+    { label: "1/2 (Halves)", short: "1/2", val: 2 },
+    { label: "1/3 (3rds)", short: "1/3", val: 3 },
+    { label: "1/4 (4ths)", short: "1/4", val: 4 },
+    { label: "1/6 (6ths)", short: "1/6", val: 6 },
+    { label: "1/8 (8ths)", short: "1/8", val: 8 },
+    { label: "1/10 (10ths)", short: "1/10", val: 10 },
+    { label: "1/12 (12ths)", short: "1/12", val: 12 },
+    { label: "1/16 (16ths)", short: "1/16", val: 16 }
+  ];
 
-    const padKeys = [
-      { k: 'C', c: 'btn-clear' }, { k: '⌫', c: '' }, { k: '/', c: 'btn-op' }, { k: '*', c: 'btn-op' },
-      { k: '7', c: '' }, { k: '8', c: '' }, { k: '9', c: '' }, { k: '-', c: 'btn-op' },
-      { k: '4', c: '' }, { k: '5', c: '' }, { k: '6', c: '' }, { k: '+', c: 'btn-op' },
-      { k: '1', c: '' }, { k: '2', c: '' }, { k: '3', c: '' }, { k: '+1/2', c: 'btn-half' },
-      { k: '0', c: '' }, { k: '.', c: '' }, { k: '(', c: '' }, { k: '=', c: 'btn-eq' }
-    ];
+  const padKeys = [
+    { k: 'C', c: 'btn-clear' }, { k: '⌫', c: '' }, { k: '/', c: 'btn-op' }, { k: '*', c: 'btn-op' },
+    { k: '7', c: '' }, { k: '8', c: '' }, { k: '9', c: '' }, { k: '-', c: 'btn-op' },
+    { k: '4', c: '' }, { k: '5', c: '' }, { k: '6', c: '' }, { k: '+', c: 'btn-op' },
+    { k: '1', c: '' }, { k: '2', c: '' }, { k: '3', c: '' }, { k: '+1/2', c: 'btn-half' },
+    { k: '0', c: '' }, { k: '.', c: '' }, { k: '(', c: '' }, { k: '=', c: 'btn-eq' }
+  ];
 
-    function toFraction(val) {
-      if (val <= 0) return '0"';
-      const whole = Math.floor(val);
-      const rem = val - whole;
-      const eighths = Math.round(rem * 8);
-      if (eighths === 0) return whole + '"';
-      if (eighths === 8) return (whole + 1) + '"';
+  function toFraction(val) {
+    if (val <= 0) return '0"';
+    const whole = Math.floor(val);
+    const rem = val - whole;
+    const eighths = Math.round(rem * 8);
+    if (eighths === 0) return whole + '"';
+    if (eighths === 8) return (whole + 1) + '"';
 
-      function gcd(a, b) { return b ? gcd(b, a % b) : a; }
-      const div = gcd(eighths, 8);
-      const num = eighths / div;
-      const den = 8 / div;
-      return (whole > 0 ? whole + ' ' : '') + num + '/' + den + '"';
-    }
+    function gcd(a, b) { return b ? gcd(b, a % b) : a; }
+    const div = gcd(eighths, 8);
+    const num = eighths / div;
+    const den = 8 / div;
+    return (whole > 0 ? whole + ' ' : '') + num + '/' + den + '"';
+  }
 
-    function renderScales() {
-      const grid = document.getElementById('scaleGrid');
-      grid.innerHTML = '';
-      scales.forEach(s => {
-        const btn = document.createElement('button');
-        btn.className = 'btn-scale' + (s.label === activeLabel ? ' active' : '');
-        btn.innerText = s.short;
-        btn.onclick = () => executeScaleCalculation(s);
-        grid.appendChild(btn);
-      });
-    }
+  function renderScales() {
+    const grid = document.getElementById('scaleGrid');
+    grid.innerHTML = '';
+    scales.forEach(s => {
+      const btn = document.createElement('button');
+      btn.className = 'btn-scale' + (s.label === activeLabel ? ' active' : '');
+      btn.innerText = s.short;
+      btn.onclick = () => executeScaleCalculation(s);
+      grid.appendChild(btn);
+    });
+  }
 
-    function renderPad() {
-      const pad = document.getElementById('numPad');
-      pad.innerHTML = '';
-      padKeys.forEach(p => {
-        const btn = document.createElement('button');
-        btn.className = 'btn-pad ' + p.c;
-        btn.innerText = p.k;
-        btn.onclick = () => handlePadInput(p.k);
-        pad.appendChild(btn);
-      });
-    }
+  function renderPad() {
+    const pad = document.getElementById('numPad');
+    pad.innerHTML = '';
+    padKeys.forEach(p => {
+      const btn = document.createElement('button');
+      btn.className = 'btn-pad ' + p.c;
+      btn.innerText = p.k;
+      btn.onclick = () => handlePadInput(p.k);
+      pad.appendChild(btn);
+    });
+  }
 
-    function handlePadInput(k) {
-      if (k === 'C') {
-        calcExpr = "0";
-      } else if (k === '⌫') {
-        calcExpr = calcExpr.length > 1 ? calcExpr.slice(0, -1) : "0";
-      } else if (k === '=') {
-        try {
-          const evaluated = Function('"use strict";return (' + calcExpr + ')')();
-          calcExpr = String(Math.round(evaluated * 1000) / 1000);
-        } catch(e) {
-          calcExpr = "Error";
-        }
-      } else if (k === '+1/2') {
-        try {
-          const evaluated = Function('"use strict";return (' + calcExpr + ')')();
-          calcExpr = String(Math.round((evaluated + 0.5) * 1000) / 1000);
-        } catch(e) {}
-      } else {
-        if (calcExpr === "0" || calcExpr === "Error") calcExpr = k;
-        else calcExpr += k;
-      }
-      document.getElementById('disp-expr').innerText = 'Base: ' + calcExpr + '"';
-    }
-
-    function executeScaleCalculation(scaleObj) {
+  function handlePadInput(k) {
+    if (k === 'C') {
+      calcExpr = "0";
+    } else if (k === '⌫') {
+      calcExpr = calcExpr.length > 1 ? calcExpr.slice(0, -1) : "0";
+    } else if (k === '=') {
       try {
         const evaluated = Function('"use strict";return (' + calcExpr + ')')();
-        committedBaseVal = Math.max(0, parseFloat(evaluated) || 0);
+        calcExpr = String(Math.round(evaluated * 1000) / 1000);
       } catch(e) {
-        committedBaseVal = 0;
+        calcExpr = "Error";
       }
+    } else if (k === '+1/2') {
+      try {
+        const evaluated = Function('"use strict";return (' + calcExpr + ')')();
+        calcExpr = String(Math.round((evaluated + 0.5) * 1000) / 1000);
+      } catch(e) {}
+    } else {
+      if (calcExpr === "0" || calcExpr === "Error") calcExpr = k;
+      else calcExpr += k;
+    }
+    document.getElementById('disp-expr').innerText = 'Base: ' + calcExpr + '"';
+  }
 
-      activeLabel = scaleObj.label;
-      activeDivisor = scaleObj.val;
-      activeMark = committedBaseVal / activeDivisor;
-
-      document.getElementById('disp-scale-name').innerText = scaleObj.label;
-      document.getElementById('disp-expr').innerText = 'Base: ' + committedBaseVal + '"';
-      document.getElementById('disp-scale-val').innerText = toFraction(activeMark);
-
-      renderScales();
-      drawTape();
+  function executeScaleCalculation(scaleObj) {
+    try {
+      const evaluated = Function('"use strict";return (' + calcExpr + ')')();
+      committedBaseVal = Math.max(0, parseFloat(evaluated) || 0);
+    } catch(e) {
+      committedBaseVal = 0;
     }
 
-    const canvas = document.getElementById('tapeCanvas');
-    const ctx = canvas.getContext('2d');
+    activeLabel = scaleObj.label;
+    activeDivisor = scaleObj.val;
+    activeMark = committedBaseVal / activeDivisor;
 
-    function resizeCanvas() {
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = (canvas.parentElement.clientWidth || 360) * dpr;
-      canvas.height = (canvas.parentElement.clientHeight || 95) * dpr;
-      drawTape();
-    }
+    document.getElementById('disp-scale-name').innerText = scaleObj.label;
+    document.getElementById('disp-expr').innerText = 'Base: ' + committedBaseVal + '"';
+    document.getElementById('disp-scale-val').innerText = toFraction(activeMark);
 
-    function drawTape() {
-      const dpr = window.devicePixelRatio || 1;
-      const w = canvas.width;
-      const h = canvas.height;
-      ctx.clearRect(0, 0, w, h);
+    renderScales();
+    drawTape();
+  }
 
-      const span = 3.0;
-      const startInch = Math.max(0, activeMark - (span / 2));
-      const pxPerInch = w / span;
-      const midY = h * 0.48;
+  const canvas = document.getElementById('tapeCanvas');
+  const ctx = canvas.getContext('2d');
 
-      ctx.fillStyle = "#fdd835";
-      ctx.fillRect(0, 0, w, h);
+  function resizeCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = (canvas.parentElement.clientWidth || 360) * dpr;
+    canvas.height = (canvas.parentElement.clientHeight || 96) * dpr;
+    drawTape();
+  }
+
+  function drawTape() {
+    const dpr = window.devicePixelRatio || 1;
+    const w = canvas.width;
+    const h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
+
+    const span = 3.0;
+    const startInch = Math.max(0, activeMark - (span / 2));
+    const pxPerInch = w / span;
+    const midY = h * 0.48;
+
+    // Classic Yellow Tape Body
+    ctx.fillStyle = "#fdd835";
+    ctx.fillRect(0, 0, w, h);
+
+    // Center Divider Line
+    ctx.strokeStyle = "#111827";
+    ctx.lineWidth = 1.2 * dpr;
+    ctx.beginPath();
+    ctx.moveTo(0, midY);
+    ctx.lineTo(w, midY);
+    ctx.stroke();
+
+    // Top Half: Inches & Fractions
+    const totalEighths = Math.floor(span * 8) + 4;
+    const firstEighth = Math.floor(startInch * 8);
+
+    for (let i = 0; i <= totalEighths; i++) {
+      const cur8 = firstEighth + i;
+      const curInch = cur8 / 8;
+      const x = (curInch - startInch) * pxPerInch;
+      if (x < 0 || x > w) continue;
+
+      const sub = cur8 % 8;
+      let tickH = midY * 0.42;
+      let lineW = 1.0 * dpr;
+
+      if (sub === 0) {
+        tickH = midY;
+        lineW = 2.2 * dpr;
+        ctx.fillStyle = "#111827";
+        ctx.font = '900 ' + (20 * dpr) + 'px "Arial Black", Impact, sans-serif';
+        ctx.textAlign = "center";
+        ctx.fillText(curInch, x + (16 * dpr), midY - (5 * dpr));
+      } else if (sub === 4) {
+        tickH = midY * 0.70;
+        lineW = 1.6 * dpr;
+      } else if (sub === 2 || sub === 6) {
+        tickH = midY * 0.54;
+        lineW = 1.2 * dpr;
+      }
 
       ctx.strokeStyle = "#111827";
-      ctx.lineWidth = 1.2 * dpr;
+      ctx.lineWidth = lineW;
       ctx.beginPath();
-      ctx.moveTo(0, midY);
-      ctx.lineTo(w, midY);
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, tickH);
       ctx.stroke();
-
-      const totalEighths = Math.floor(span * 8) + 4;
-      const firstEighth = Math.floor(startInch * 8);
-
-      for (let i = 0; i <= totalEighths; i++) {
-        const cur8 = firstEighth + i;
-        const curInch = cur8 / 8;
-        const x = (curInch - startInch) * pxPerInch;
-        if (x < 0 || x > w) continue;
-
-        const sub = cur8 % 8;
-        let tickH = midY * 0.42;
-        let lineW = 1.0 * dpr;
-
-        if (sub === 0) {
-          tickH = midY;
-          lineW = 2.2 * dpr;
-          ctx.fillStyle = "#111827";
-          ctx.font = '900 ' + (20 * dpr) + 'px "Arial Black", Impact, sans-serif';
-          ctx.textAlign = "center";
-          ctx.fillText(curInch, x + (16 * dpr), midY - (5 * dpr));
-        } else if (sub === 4) {
-          tickH = midY * 0.70;
-          lineW = 1.6 * dpr;
-        } else if (sub === 2 || sub === 6) {
-          tickH = midY * 0.54;
-          lineW = 1.2 * dpr;
-        }
-
-        ctx.strokeStyle = "#111827";
-        ctx.lineWidth = lineW;
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, tickH);
-        ctx.stroke();
-      }
-
-      const startCm = startInch * 2.54;
-      const pxPerCm = pxPerInch / 2.54;
-      const totalMm = Math.floor(span * 2.54 * 10) + 10;
-      const firstMm = Math.floor(startCm * 10);
-
-      for (let i = 0; i <= totalMm; i++) {
-        const curMm = firstMm + i;
-        const curCm = curMm / 10;
-        const x = (curCm - startCm) * pxPerCm;
-        if (x < 0 || x > w) continue;
-
-        const sub = curMm % 10;
-        let tickH = (h - midY) * 0.35;
-        let lineW = 0.9 * dpr;
-
-        if (sub === 0) {
-          tickH = (h - midY);
-          lineW = 2.0 * dpr;
-          ctx.fillStyle = "#111827";
-          ctx.font = '800 ' + (15 * dpr) + 'px "Arial Black", Impact, sans-serif';
-          ctx.textAlign = "center";
-          ctx.fillText(curCm, x + (13 * dpr), h - (5 * dpr));
-        } else if (sub === 5) {
-          tickH = (h - midY) * 0.65;
-          lineW = 1.4 * dpr;
-        }
-
-        ctx.strokeStyle = "#111827";
-        ctx.lineWidth = lineW;
-        ctx.beginPath();
-        ctx.moveTo(x, h);
-        ctx.lineTo(x, h - tickH);
-        ctx.stroke();
-      }
-
-      const redX = (activeMark - startInch) * pxPerInch;
-      if (redX >= 0 && redX <= w) {
-        ctx.strokeStyle = "#dc2626";
-        ctx.fillStyle = "#dc2626";
-        ctx.lineWidth = 2.5 * dpr;
-
-        ctx.beginPath();
-        ctx.moveTo(redX, 0);
-        ctx.lineTo(redX, h);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(redX - (6 * dpr), 0);
-        ctx.lineTo(redX + (6 * dpr), 0);
-        ctx.lineTo(redX, 9 * dpr);
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.moveTo(redX - (6 * dpr), h);
-        ctx.lineTo(redX + (6 * dpr), h);
-        ctx.lineTo(redX, h - (9 * dpr));
-        ctx.fill();
-      }
     }
 
-    window.addEventListener('resize', resizeCanvas);
+    // Bottom Half: Metric (cm & mm)
+    const startCm = startInch * 2.54;
+    const pxPerCm = pxPerInch / 2.54;
+    const totalMm = Math.floor(span * 2.54 * 10) + 10;
+    const firstMm = Math.floor(startCm * 10);
+
+    for (let i = 0; i <= totalMm; i++) {
+      const curMm = firstMm + i;
+      const curCm = curMm / 10;
+      const x = (curCm - startCm) * pxPerCm;
+      if (x < 0 || x > w) continue;
+
+      const sub = curMm % 10;
+      let tickH = (h - midY) * 0.35;
+      let lineW = 0.9 * dpr;
+
+      if (sub === 0) {
+        tickH = (h - midY);
+        lineW = 2.0 * dpr;
+        ctx.fillStyle = "#111827";
+        ctx.font = '800 ' + (15 * dpr) + 'px "Arial Black", Impact, sans-serif';
+        ctx.textAlign = "center";
+        ctx.fillText(curCm, x + (13 * dpr), h - (5 * dpr));
+      } else if (sub === 5) {
+        tickH = (h - midY) * 0.65;
+        lineW = 1.4 * dpr;
+      }
+
+      ctx.strokeStyle = "#111827";
+      ctx.lineWidth = lineW;
+      ctx.beginPath();
+      ctx.moveTo(x, h);
+      ctx.lineTo(x, h - tickH);
+      ctx.stroke();
+    }
+
+    // Red Target Laser Needle
+    const redX = (activeMark - startInch) * pxPerInch;
+    if (redX >= 0 && redX <= w) {
+      ctx.strokeStyle = "#dc2626";
+      ctx.fillStyle = "#dc2626";
+      ctx.lineWidth = 2.5 * dpr;
+
+      ctx.beginPath();
+      ctx.moveTo(redX, 0);
+      ctx.lineTo(redX, h);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(redX - (6 * dpr), 0);
+      ctx.lineTo(redX + (6 * dpr), 0);
+      ctx.lineTo(redX, 9 * dpr);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.moveTo(redX - (6 * dpr), h);
+      ctx.lineTo(redX + (6 * dpr), h);
+      ctx.lineTo(redX, h - (9 * dpr));
+      ctx.fill();
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
     renderScales();
     renderPad();
     resizeCanvas();
   });
+
+  window.addEventListener('resize', resizeCanvas);
 </script>
 </body>
 </html>
